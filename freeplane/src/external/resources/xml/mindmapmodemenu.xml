@@ -586,6 +586,9 @@
 				actionKey="TextChangeHotKeyAction"
 				actionClass="org.freeplane.core.ui.textchanger.TextChangeHotKeyAction"
 				accelerator="control shift F10" />
+			<Entry name="menu_originals">
+				<Entry name="HelloAction" plugin="org.freeplane.plugin.helloaction" />
+			</Entry>
 		</Entry>
 		<Entry name="mindmaps">
 			<Entry builder="separator" />

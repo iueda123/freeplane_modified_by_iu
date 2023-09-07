@@ -14,3 +14,5 @@ include 'freeplane',
         'freeplane_plugin_jsyntaxpane',
 		'freeplane_debughelper',
         'JOrtho_0.4_freeplane'
+include 'freeplane_plugin_helloaction'
+
