@@ -5,6 +5,7 @@ plugins {
 
 dependencies {
     implementation project(':freeplane')
+    implementation 'org.freeplane:gradle-freeplane-plugin:0.6'
 
     // from flatDir "localGitDepsRepository":
     // from the Debian "libjsyntaxpane-java" package:

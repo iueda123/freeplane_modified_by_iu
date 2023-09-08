@@ -1,0 +1,4 @@
+dependencies {
+    implementation project(':freeplane')
+    implementation 'org.freeplane:gradle-freeplane-plugin:0.6'
+}

@@ -1,7 +1,8 @@
 dependencies {
     implementation project(':freeplane')
     implementation project(':freeplane_plugin_jsyntaxpane')
-	lib ('org.apache.groovy:groovy-all:4.0.13') {
+    implementation 'org.freeplane:gradle-freeplane-plugin:0.6'
+    lib ('org.apache.groovy:groovy-all:4.0.13') {
 		exclude group:'org.codehaus.groovy', module:'groovy-test'
 		exclude group:'org.codehaus.groovy', module:'groovy-test-junit5'
 		exclude group:'org.codehaus.groovy', module:'groovy-testng'

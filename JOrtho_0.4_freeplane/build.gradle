@@ -6,6 +6,7 @@ configurations {
 }
 
 dependencies {
+    implementation 'org.freeplane:gradle-freeplane-plugin:0.6'
     ant_tasks project(':freeplane_ant')
 }
 

@@ -587,6 +587,10 @@
 				actionClass="org.freeplane.core.ui.textchanger.TextChangeHotKeyAction"
 				accelerator="control shift F10" />
 			<Entry name="menu_originals">
+				<Entry name="MakeLinkAbsolute" plugin="org.freeplane.plugin.make_link_absolute" />
+				<Entry name="MakeLinkRelative" plugin="org.freeplane.plugin.make_link_relative" />
+				<Entry name="MoveLinkedFile" plugin="org.freeplane.plugin.move_linked_file" />
+				<Entry name="OpenParentDir" plugin="org.freeplane.plugin.open_parent_dir" />
 				<Entry name="HelloAction" plugin="org.freeplane.plugin.helloaction" />
 			</Entry>
 		</Entry>

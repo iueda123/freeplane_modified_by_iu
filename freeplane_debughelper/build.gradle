@@ -6,7 +6,8 @@ repositories {
 }
 
 dependencies {
-	def exclusions = [project.name, 'freeplane_ant']
+	implementation 'org.freeplane:gradle-freeplane-plugin:0.6'
+    def exclusions = [project.name, 'freeplane_ant']
 	if (! Os.isFamily(Os.FAMILY_MAC)) {
 		exclusions.add('freeplane_mac')
 	}

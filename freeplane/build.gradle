@@ -18,7 +18,8 @@ sourceSets {
 }
 
 dependencies {
-	mergedViewerDependencies 'org.freeplane.dpolivaev.mnemonicsetter:mnemonicsetter:0.6'
+	implementation 'org.freeplane:gradle-freeplane-plugin:0.6'
+    mergedViewerDependencies 'org.freeplane.dpolivaev.mnemonicsetter:mnemonicsetter:0.6'
 	lib ':kitfox-svg-salamander-1.1.1-p1'
 	lib 'com.github.robtimus:data-url:2.0.1'
 	lib 'com.formdev:flatlaf:3.1.1'

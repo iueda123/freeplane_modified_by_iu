@@ -3,8 +3,8 @@ include 'freeplane',
         'freeplane_api',
         'freeplane_ant',
         'freeplane_framework',
-        'freeplane_mac',
-        'freeplane_plugin_bugreport',
+        'freeplane_mac'
+include 'freeplane_plugin_bugreport',
         'freeplane_plugin_formula',
         'freeplane_plugin_latex',
         'freeplane_plugin_markdown',
@@ -15,4 +15,8 @@ include 'freeplane',
 		'freeplane_debughelper',
         'JOrtho_0.4_freeplane'
 include 'freeplane_plugin_helloaction'
+include 'freeplane_plugin_make_link_relative'
+include 'freeplane_plugin_make_link_absolute'
+include 'freeplane_plugin_move_linked_file'
+include 'freeplane_plugin_open_parent_dir'
 

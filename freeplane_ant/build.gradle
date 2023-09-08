@@ -1,4 +1,5 @@
 dependencies {
+    implementation 'org.freeplane:gradle-freeplane-plugin:0.6'
     lib group: 'org.apache.ant', name: 'ant', version: '1.10.13'
 }
 

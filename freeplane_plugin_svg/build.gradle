@@ -1,7 +1,8 @@
 dependencies {
     implementation project(':freeplane')
+    implementation 'org.freeplane:gradle-freeplane-plugin:0.6'
 
-	lib 'org.apache.xmlgraphics:batik-transcoder:1.16'
+    lib 'org.apache.xmlgraphics:batik-transcoder:1.16'
 	lib 'org.apache.xmlgraphics:batik-swing:1.16'
 	lib 'org.apache.xmlgraphics:batik-codec:1.16'
 	lib ('org.apache.xmlgraphics:fop-core:2.7') {transitive = false}

@@ -2,6 +2,7 @@ dependencies {
     implementation project(':freeplane')
     implementation project(':freeplane_plugin_script')
     implementation project(':freeplane_plugin_jsyntaxpane')
+    implementation 'org.freeplane:gradle-freeplane-plugin:0.6'
 }
 
 ext.bundleImports = 'org.freeplane.plugin.script.*,de.sciss.syntaxpane.*'

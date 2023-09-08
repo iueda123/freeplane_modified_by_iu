@@ -7,7 +7,8 @@ configurations{
 }
 
 dependencies {
-	mergedApiDependency project(':freeplane_api')
+	implementation 'org.freeplane:gradle-freeplane-plugin:0.6'
+    mergedApiDependency project(':freeplane_api')
 }
 
 task freeplanelauncherJar(type: Jar) {
