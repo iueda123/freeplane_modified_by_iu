@@ -18,6 +18,7 @@ import java.nio.file.Paths;
 
 public class MakeLinkAbsolute extends AMultipleNodeAction {
 
+
     public MakeLinkAbsolute() {
         super("MakeLinkAbsolute");
     }
@@ -31,14 +32,28 @@ public class MakeLinkAbsolute extends AMultipleNodeAction {
 
         /* **** リンクPathのStringを取り出す **** */
         String linkPathString = NodeLinks.getLinkAsString(node);//リンクPathのStringを取り出す
-        if (linkPathString == null) {//リンクが設定されていない場合は何もしない
+
+        if (linkPathString == null) {
+            //リンクが設定されていない場合は警告表示
+            JOptionPane.showMessageDialog(null, "The node does not have a link.");
             return;
         }
-        if (linkPathString.startsWith("file:/")) {//既に絶対パスの場合何もしない。
+
+        //インターネット系アドレスの場合
+        if (linkPathString.startsWith("http") || linkPathString.startsWith("ftp:/")) {//webアドレスの場合何もしない。
             return;
         }
-        if (linkPathString.startsWith("http:/") || linkPathString.startsWith("ftp:/")) {//webアドレスの場合何もしない。
+
+        if (linkPathString.startsWith("file:/")) {
+            //「file:/」で始まるリンクが設定されている場合
+            // （freeplaneの設定でハイパーリンクの扱いが”絶対リンク”となっている場合に作られたリンクの場合）
+
+            //何もしない
+
             return;
+        }else{
+            //「file:/」で始まらないリンクが設定されている場合
+            // （何らかの理由で標準的な絶対パスとは違う形式の絶対パスが設定されている場合）
         }
 
         System.out.println("linkAsString: " + linkPathString + "@A_ConvertLinkToAbsoluteAction.java line 59");
@@ -46,7 +61,7 @@ public class MakeLinkAbsolute extends AMultipleNodeAction {
         //linkPathString = linkPathString.replaceAll("%20", " ");//リンク先パスに半角スペースを意味する「%20」が含まれるとエラーが起こることを回避
         //System.out.println("linkPathString: " + linkPathString);
 
-        /* **** 現在開いているファイルパスを取り出す **** */
+        /* **** 現在開いているmmファイルのパスを取り出す **** */
         final MapModel map = Controller.getCurrentController().getMap();
         String currentMMFilePathString;
         if (map.getFile() != null) {
@@ -61,10 +76,8 @@ public class MakeLinkAbsolute extends AMultipleNodeAction {
 
 
         /**
-         *
          * 「#」が「%23」となってしまうバグ？回避のため、 また同一ファイル内ノードリンク「#ID_123456789」に対応するため、
          * ファイルパス部分とノードID部分に一旦分離し、再度結合する。
-         *
          */
         Path raw_link_path_without_node_id = null;
         String node_id_string = "";
@@ -89,9 +102,14 @@ public class MakeLinkAbsolute extends AMultipleNodeAction {
         /* **** 親フォルダへのパスにリンクパスを結合して、相対パスを絶対化する **** */
         Path absoluted_link_path = parentPath.resolve(raw_link_path_without_node_id).normalize();//resolveメソッドを使用すると、パスを結合できます。 部分パス（ルート要素を含まないパス）を渡すと、その部分パスが元のパスに追加されます。
         System.out.println("absoluted_link_path: " + absoluted_link_path + "line 106 @A_ConvertLinkToAbsoluteAction.java");
-        URI AbsolutedLinkUri = absoluted_link_path.toUri();
-        System.out.println("AbsolutedLinkUri: " + AbsolutedLinkUri + "    line 108 @A_ConvertLinkToAbsoluteAction.java");
-        System.out.println("AbsolutedLinkUri.toString(): " + AbsolutedLinkUri.toString() + "    line 108 @A_ConvertLinkToAbsoluteAction.java");
+
+        // to URI
+        URI AbsolutifiedLinkUri = absoluted_link_path.toUri();
+        System.out.println("AbsolutedLinkUri: " + AbsolutifiedLinkUri + "    line 108 @A_ConvertLinkToAbsoluteAction.java");
+
+        // 「file:///hoge/...」 ⇒ 「file:/hoge/...」
+        System.out.println("AbsolutedLinkUri.toString(): " + AbsolutifiedLinkUri.toString() + "    line 108 @A_ConvertLinkToAbsoluteAction.java");
+        String absolutified_link_path_str = AbsolutifiedLinkUri.toString().replaceFirst("file://", "file:");
 
 
         // やっかいな挙動対策。
@@ -99,11 +117,11 @@ public class MakeLinkAbsolute extends AMultipleNodeAction {
         // Decodeによって「+」→「 」となることに注意！
         //半角スペースは IllegalArgumentException の原因となるし、もともとの「+」という文字列情報が失われる。
         // これを回避するため、この時点で前もって「+」を「%2B」にしておく。
-        AbsolutedLinkUri = URI.create(AbsolutedLinkUri.toString().replaceAll("\\+", "%2B"));
+        AbsolutifiedLinkUri = URI.create(absolutified_link_path_str.replaceAll("\\+", "%2B"));
 
 
         /* **** URL Encode された文字列を 識別しやすいようにDecode **** */
-        String decode_target = AbsolutedLinkUri + node_id_string;
+        String decode_target = AbsolutifiedLinkUri + node_id_string;
         String decede_result = "";
         //System.out.println("line 111 @A_ConvertLinkToAbsoluteAction.java");
         try {
@@ -113,8 +131,7 @@ public class MakeLinkAbsolute extends AMultipleNodeAction {
             uee.printStackTrace();
         }
         //System.out.println("line 119 @A_ConvertLinkToAbsoluteAction.java");
-        System.out.println("decede_result: " + decede_result + "line 132 @A_ConvertLinkToAbsoluteAction.java");
-
+        System.out.println("decede_result: " + decede_result + " line 132 @A_ConvertLinkToAbsoluteAction.java");
 
 
         /* **** リンクを書き換える **** */

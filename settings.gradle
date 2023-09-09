@@ -9,7 +9,6 @@ include 'freeplane_plugin_bugreport',
         'freeplane_plugin_latex',
         'freeplane_plugin_markdown',
         'freeplane_plugin_openmaps',
-        'freeplane_plugin_script',
         'freeplane_plugin_svg',
         'freeplane_plugin_jsyntaxpane',
 		'freeplane_debughelper',
@@ -19,4 +18,4 @@ include 'freeplane_plugin_make_link_relative'
 include 'freeplane_plugin_make_link_absolute'
 include 'freeplane_plugin_move_linked_file'
 include 'freeplane_plugin_open_parent_dir'
-
+include 'freeplane_plugin_script'
