@@ -1,5 +1,6 @@
 package org.freeplane.plugin.move_linked_file;
 
+import com.orz_he.IuFileSystemManager;
 import org.freeplane.core.ui.AMultipleNodeAction;
 import org.freeplane.core.util.HtmlUtils;
 import org.freeplane.core.util.TextUtils;
@@ -10,7 +11,6 @@ import org.freeplane.features.map.MapModel;
 import org.freeplane.features.map.NodeModel;
 import org.freeplane.features.mode.Controller;
 import org.freeplane.plugin.util.CharacterPickUpper_ver2;
-import org.freeplane.plugin.util.FileCopyTools_v5;
 import org.freeplane.plugin.util.UnicodeEscapeEncoderDecoder_ver4;
 import org.freeplane.plugin.util.UnsuitableCharaReplacer_ver2;
 
@@ -23,6 +23,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 
 public class MoveLinkedFile extends AMultipleNodeAction {
@@ -91,9 +92,12 @@ public class MoveLinkedFile extends AMultipleNodeAction {
 			/* **** 現在のMMファイルの親フォルダへのパスを取り出す  **** */
 			Path parentPath = Paths.get(currentMMFilePath).getParent();
 
+			/* **** 現在のMMファイルの名前を拡張子なしで取り出す **** */
+			String mm_filename_without_ext = getNameOnly(Paths.get(currentMMFilePath).getFileName().toString());
 
 			/* **** コピー先のフォルダを設定 **** */
-			Path destFolderPath = parentPath.resolve("./" + Paths.get(currentMMFilePath).getFileName() + ".files").normalize();
+			Path destFolderPath = parentPath.resolve("./" + mm_filename_without_ext + "_files").normalize();
+
 			//Path destFolderPath = parentPath.resolve("./").normalize();
 			System.out.println("destFolderPath:" + destFolderPath);
 
@@ -103,11 +107,11 @@ public class MoveLinkedFile extends AMultipleNodeAction {
 			/* **** ファイルを複製 **** */
 			String srcFilePath = linkedFilePath.toString();
 			String destFilePath = destFolderPath.toString() + "/" + newFileName;
-			Boolean copyResult = FileCopyTools_v5.copy(srcFilePath, destFilePath);
+			Boolean copyResult = IuFileSystemManager.copy(srcFilePath, destFilePath);
 
 			if (copyResult) {//コピーが成功した場合
 				/* **** コピー確認ダイアログボックスの表示 **** */
-				int answer = JOptionPane.showConfirmDialog(null, FileCopyTools_v5.getLogBuf(),"リンクを書き換え確認",JOptionPane.OK_CANCEL_OPTION);
+				int answer = JOptionPane.showConfirmDialog(null, IuFileSystemManager.getLogBuf(),"リンクを書き換え確認",JOptionPane.OK_CANCEL_OPTION);
 
 				if (answer == 0) {//「はい」の場合
 
@@ -146,8 +150,8 @@ public class MoveLinkedFile extends AMultipleNodeAction {
 				}
 			} else {
 				System.out.println("ファイルコピー失敗：copyResult=" + copyResult);
-				System.out.println("原因："+ FileCopyTools_v5.getLogBuf());
-				JOptionPane.showMessageDialog(null, FileCopyTools_v5.getLogBuf(),"ファイルコピー失敗", JOptionPane.PLAIN_MESSAGE);
+				System.out.println("原因："+ IuFileSystemManager.getLogBuf());
+				JOptionPane.showMessageDialog(null, IuFileSystemManager.getLogBuf(),"ファイルコピー失敗", JOptionPane.PLAIN_MESSAGE);
 			}
 
 		} else {
@@ -155,6 +159,21 @@ public class MoveLinkedFile extends AMultipleNodeAction {
 		}
 
 	}
+
+	//メソッド
+	private static String getNameOnly(String FileNameWithExtension) {
+		Pattern splitMark = Pattern.compile("\\.");
+		String[] SplitResult = splitMark.split(FileNameWithExtension);
+
+		/*拡張子以外を分離*/
+		String FileName = SplitResult[0];
+		for (int c = 1; c < SplitResult.length - 1; c++) {
+			FileName = FileName + "." + SplitResult[c];
+		}
+		return FileName;
+
+	}
+
 
 	public static void main(String[] args){
 

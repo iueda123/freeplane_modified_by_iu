@@ -19,3 +19,5 @@ include 'freeplane_plugin_make_link_absolute'
 include 'freeplane_plugin_move_linked_file'
 include 'freeplane_plugin_open_parent_dir'
 include 'freeplane_plugin_script'
+include 'IuTools2023'
+

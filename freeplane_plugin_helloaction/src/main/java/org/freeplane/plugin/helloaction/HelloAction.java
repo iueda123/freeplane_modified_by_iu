@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 // メインプログラムのfreeplaneを起動しようとした時に「java.lang.NoClassDefFoundError」が出て、
 // 起動できないというトラブルに見舞われる。
 
+
 import org.freeplane.core.ui.AFreeplaneAction;
 
 import javax.swing.*;
