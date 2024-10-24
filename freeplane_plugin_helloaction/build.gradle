@@ -1,0 +1,10 @@
+dependencies {
+    implementation project(':freeplane')
+    implementation 'org.freeplane:gradle-freeplane-plugin:0.6'
+
+    /* *** Log4J2 *** */
+    lib group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.20.0'
+    lib group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.20.0'
+}
+
+ext.bundleImports = 'de.sciss.syntaxpane.*'
