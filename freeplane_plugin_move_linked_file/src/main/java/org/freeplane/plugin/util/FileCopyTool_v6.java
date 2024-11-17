@@ -1,7 +1,10 @@
 /*
  * http://itpro.nikkeibp.co.jp/article/COLUMN/20060410/234874/
  */
-package com.orz_he;
+package org.freeplane.plugin.util;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,16 +16,21 @@ import java.util.regex.Pattern;
 /**
  * @author issey
  */
-public class IuFileSystemManager {
+public class FileCopyTool_v6 {
 
-    String targetFolderPath;
+    private static String logBuf = "";
+
+    private static final Logger logger = LogManager.getLogger("HelloWorld");
+
+
+    private String targetFolderPath;
 
     /**
      * コンストラクタ
      *
      * @param targetFolderPath 転送先
      */
-    public IuFileSystemManager(String targetFolderPath) {
+    public FileCopyTool_v6(String targetFolderPath) {
         this.targetFolderPath = targetFolderPath + "/";
     }
 
@@ -84,16 +92,16 @@ public class IuFileSystemManager {
     public static boolean reName(String srcFilePath, String newName) {
         File srcFile = new File(srcFilePath);
         if (!srcFile.exists()) {
-            System.out.println("リネーム対象となるファイルが存在しません。");
+            logger.info("リネーム対象となるファイルが存在しません。");
             return false;
         }
         if (newName == "" || newName == null) {
-            System.out.println("新しい名前の入力が空です。");
+            logger.info("新しい名前の入力が空です。");
             return false;
         }
         File newFile = new File(srcFile.getParentFile().getAbsolutePath() + "/" + newName);
         if (newFile.exists()) {
-            System.out.println("既にその名前のファイルまたはフォルダが存在します。");
+            logger.info("既にその名前のファイルまたはフォルダが存在します。");
             return false;
         }
         try {
@@ -162,8 +170,6 @@ public class IuFileSystemManager {
 
     private static String os_name = System.getProperty("os.name").toLowerCase();
 
-    private static String logBuf = "";
-
     /**
      * コピーなどの途中経過が記録された文字列を取り出す。
      *
@@ -173,7 +179,7 @@ public class IuFileSystemManager {
         return logBuf;
     }
 
-    private static void clearLogBuf() {
+    public static void clearLogBuf() {
         logBuf = "";
     }
 
@@ -202,15 +208,15 @@ public class IuFileSystemManager {
 
     /**
      * @param ParentFolderPath
-     * @param FileNameWithExtention
-     * @param overwrightFlag
+     * @param FileNameWithExtension
+     * @param shouldOverwrite
      * @return
      * @throws Exception
      */
-    private static String createANewEmptyFile(String ParentFolderPath, String FileNameWithExtention, boolean overwrightFlag) throws Exception {
+    private static String createANewEmptyFile(String ParentFolderPath, String FileNameWithExtension, boolean shouldOverwrite) throws Exception {
 
         String msg = "-------createANewEmptyFile-------\n";
-        msg += "「" + ParentFolderPath + "」に新しいファイル「" + FileNameWithExtention + "」の作成を試みます。\n";
+        msg += "「" + ParentFolderPath + "」に新しいファイル「" + FileNameWithExtension + "」の作成を試みます。\n";
         if (!new File(ParentFolderPath).exists()) {
             //Exception e = new Exception("親フォルダが存在しません。");
             //throw new Exception();
@@ -222,42 +228,44 @@ public class IuFileSystemManager {
 
 
         /* **** まずは拡張子を分離 **** */
-        String splitTargetLine = FileNameWithExtention;
-        String Extension;
+        String target_str_of_split = FileNameWithExtension;
+        String ext;
 
         Pattern split_mark = Pattern.compile("\\.");
 
-        String[] splitResult1 = split_mark.split(splitTargetLine);
-        if (splitResult1.length > 1) {//拡張子を持っている場合
-            Extension = splitResult1[splitResult1.length - 1];
+        String[] split_result_array = split_mark.split(target_str_of_split);
+        if (split_result_array.length > 1) {//拡張子を持っている場合
+            ext = split_result_array[split_result_array.length - 1];
         } else {
-            Extension = "";
+            ext = "";
         }
-        System.out.println("Extension:" + Extension + "\n");
+        logger.info("Extension:" + ext + "\n");
 
         /* **** 次に拡張子以外を分離 **** */
-        String FileNameWithoutExtension = splitResult1[0];
-        for (int c = 1; c < splitResult1.length - 1; c++) {
-            FileNameWithoutExtension = FileNameWithoutExtension + "." + splitResult1[c];
+        String filename_without_extension = split_result_array[0];
+        for (int c = 1; c < split_result_array.length - 1; c++) {
+            filename_without_extension = filename_without_extension + "." + split_result_array[c];
         }
-        System.out.println("FileNameWithoutExtension:" + FileNameWithoutExtension + "\n");
+        logger.info("FileNameWithoutExtension:" + filename_without_extension + "\n");
 
+
+        String end_of_new_file_name = "";
+        if( ext.length() != 0){
+            end_of_new_file_name = "." + ext;
+        }
 
         /*
          * Fileクラスの構築
          */
-        String HeadString = FileNameWithoutExtension;
-        String FootString = "." + Extension;
-        int addNum = 0;
 
-
-        File NewFile = new File(ParentFolderPath + "/" + HeadString + FootString);
+        File NewFile = new File(ParentFolderPath + "/" + filename_without_extension + end_of_new_file_name);
 
         //上書き禁止なら数字を追加した新しいファイル名を提案する
-        if (!overwrightFlag) {
+        int addNum = 0;
+        if (!shouldOverwrite) {
             while (NewFile.exists()) {
                 addNum++;
-                NewFile = new File(ParentFolderPath + "/" + HeadString + "(" + addNum + ")" + FootString);
+                NewFile = new File(ParentFolderPath + "/" + filename_without_extension + "(" + addNum + ")" + end_of_new_file_name);
             }
         }
         //msg += "新しいファイルの名前: " + NewFile.getName() + "\n" ;

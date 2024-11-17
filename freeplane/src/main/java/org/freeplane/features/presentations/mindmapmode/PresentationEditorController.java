@@ -4,10 +4,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 
-import javax.swing.Box;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import org.freeplane.core.resources.components.OptionPanelConstants;
 import org.freeplane.core.ui.AFreeplaneAction;

@@ -1,6 +1,6 @@
 package org.freeplane.plugin.move_linked_file;
 
-import com.orz_he.IuFileSystemManager;
+import org.freeplane.plugin.util.FileCopyTool_v6;
 import org.freeplane.core.ui.AMultipleNodeAction;
 import org.freeplane.core.util.HtmlUtils;
 import org.freeplane.core.util.TextUtils;
@@ -107,11 +107,11 @@ public class MoveLinkedFile extends AMultipleNodeAction {
 			/* **** ファイルを複製 **** */
 			String srcFilePath = linkedFilePath.toString();
 			String destFilePath = destFolderPath.toString() + "/" + newFileName;
-			Boolean copyResult = IuFileSystemManager.copy(srcFilePath, destFilePath);
+			Boolean copyResult = FileCopyTool_v6.copy(srcFilePath, destFilePath);
 
 			if (copyResult) {//コピーが成功した場合
 				/* **** コピー確認ダイアログボックスの表示 **** */
-				int answer = JOptionPane.showConfirmDialog(null, IuFileSystemManager.getLogBuf(),"リンクを書き換え確認",JOptionPane.OK_CANCEL_OPTION);
+				int answer = JOptionPane.showConfirmDialog(null, FileCopyTool_v6.getLogBuf(),"リンクを書き換え確認",JOptionPane.OK_CANCEL_OPTION);
 
 				if (answer == 0) {//「はい」の場合
 
@@ -150,8 +150,8 @@ public class MoveLinkedFile extends AMultipleNodeAction {
 				}
 			} else {
 				System.out.println("ファイルコピー失敗：copyResult=" + copyResult);
-				System.out.println("原因："+ IuFileSystemManager.getLogBuf());
-				JOptionPane.showMessageDialog(null, IuFileSystemManager.getLogBuf(),"ファイルコピー失敗", JOptionPane.PLAIN_MESSAGE);
+				System.out.println("原因："+ FileCopyTool_v6.getLogBuf());
+				JOptionPane.showMessageDialog(null, FileCopyTool_v6.getLogBuf(),"ファイルコピー失敗", JOptionPane.PLAIN_MESSAGE);
 			}
 
 		} else {
